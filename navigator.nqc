@@ -1,0 +1,100 @@
+/*
+** Copyright (c) 2004 Alexis Megas.
+** A simple robot that will discover the center of an enclosed
+** rectangle. Once the center has been located, the robot
+** will power itself down. The robot must be placed inside
+** the rectangle and be parallel to one of the sides.
+*/
+
+#define LEFT OUT_A
+#define RIGHT OUT_C
+#define EYE SENSOR_1
+#define THRESHOLD 38
+#define MOTOR_STRENGTH 3
+
+task main()
+{
+  SetSensor(EYE, SENSOR_LIGHT);
+  SetPower(LEFT + RIGHT, MOTOR_STRENGTH);
+
+  /*
+  ** First task: find the midpoint of one length.
+  */
+
+  forward();
+
+  while(EYE >= THRESHOLD);
+
+  Off(LEFT + RIGHT);
+  find_midpoint();
+
+  /*
+  ** Rotate by 90 degrees.
+  */
+
+  if(Random(1) == 0)
+    turn_left();
+  else
+    turn_right();
+
+  Wait(80);
+  Off(LEFT + RIGHT);
+
+  /*
+  ** Last task: find the next midpoint.
+  */
+
+  forward();
+
+  while(EYE >= THRESHOLD);
+
+  Off(LEFT + RIGHT);
+  find_midpoint();
+}
+
+void find_midpoint()
+{
+  int i = 0;
+  int midpoint = 0;
+
+  reverse();
+  Wait(50);
+
+  do
+    {
+      midpoint += 1;
+    }
+  until(EYE < THRESHOLD);
+
+  Off(LEFT + RIGHT);
+  midpoint /= 2;
+  forward();
+
+  for(i = 1; i <= midpoint; i++);
+
+  Off(LEFT + RIGHT);
+}
+
+void forward()
+{
+  Off(LEFT + RIGHT);
+  OnFwd(LEFT + RIGHT);
+}
+
+void reverse()
+{
+  Off(LEFT + RIGHT);
+  OnRev(LEFT + RIGHT);
+}
+
+void turn_left()
+{
+  Off(LEFT + RIGHT);
+  OnFwd(RIGHT);
+}
+
+void turn_right()
+{
+  Off(LEFT + RIGHT);
+  OnFwd(LEFT);
+}
