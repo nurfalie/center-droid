@@ -6,10 +6,10 @@
 ** the rectangle and be parallel to one of the sides.
 */
 
-#define EYE SENSOR_1
-#define LEFT OUT_A
+#define EYE (SENSOR_1)
+#define LEFT (OUT_A)
 #define MOTOR_STRENGTH 3
-#define RIGHT OUT_C
+#define RIGHT (OUT_C)
 #define THRESHOLD 38
 
 task main()
